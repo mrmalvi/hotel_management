@@ -22,7 +22,6 @@ gem "kaminari"
 gem "font-awesome-rails"
 
 gem "jsbundling-rails"
-gem "sprockets-rails"
 
 # File Upload & Storage
 gem "aws-sdk-s3", require: false
