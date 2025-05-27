@@ -1,0 +1,41 @@
+<nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-center mt-8">
+  <ul class="inline-flex -space-x-px">
+    <% if paginator.prev_page %>
+      <li>
+        <%= link_to raw('&laquo;'), url_for(page: paginator.prev_page), class: "px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700" %>
+      </li>
+    <% else %>
+      <li>
+        <span class="px-3 py-2 ml-0 leading-tight text-gray-400 bg-gray-100 border border-gray-300 rounded-l-lg">&laquo;</span>
+      </li>
+    <% end %>
+
+    <% paginator.each_page do |page| %>
+      <% if page %>
+        <% if page == current_page %>
+          <li>
+            <span class="px-3 py-2 leading-tight text-indigo-600 bg-indigo-100 border border-gray-300"><%= page %></span>
+          </li>
+        <% else %>
+          <li>
+            <%= link_to page, url_for(page: page), class: "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700" %>
+          </li>
+        <% end %>
+      <% else %>
+        <li>
+          <span class="px-3 py-2 leading-tight text-gray-400 bg-gray-100 border border-gray-300">&hellip;</span>
+        </li>
+      <% end %>
+    <% end %>
+
+    <% if paginator.next_page %>
+      <li>
+        <%= link_to raw('&raquo;'), url_for(page: paginator.next_page), class: "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700" %>
+      </li>
+    <% else %>
+      <li>
+        <span class="px-3 py-2 leading-tight text-gray-400 bg-gray-100 border border-gray-300 rounded-r-lg">&raquo;</span>
+      </li>
+    <% end %>
+  </ul>
+</nav> 

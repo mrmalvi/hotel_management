@@ -1,0 +1,163 @@
+<div class="min-h-screen bg-gray-100">
+  <!-- Hero Section with Search -->
+  <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8 text-center">Find Your Perfect Stay</h1>
+      
+      <%= form_with url: hotels_path, method: :get, class: "max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6" do |f| %>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <%= f.label :location, class: "block text-gray-700 text-sm font-bold mb-2" %>
+            <%= f.text_field :location, placeholder: "Where are you going?", class: "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          </div>
+          
+          <div>
+            <%= f.label :check_in, "Check-in", class: "block text-gray-700 text-sm font-bold mb-2" %>
+            <%= f.date_field :check_in, class: "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          </div>
+          
+          <div>
+            <%= f.label :check_out, "Check-out", class: "block text-gray-700 text-sm font-bold mb-2" %>
+            <%= f.date_field :check_out, class: "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          </div>
+          
+          <div>
+            <%= f.label :guests, "Guests", class: "block text-gray-700 text-sm font-bold mb-2" %>
+            <div class="flex space-x-2">
+              <%= f.select :adults, (1..10).map { |n| [n, n] }, { prompt: "Adults" }, class: "w-1/2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+              <%= f.select :children, (0..10).map { |n| [n, n] }, { prompt: "Children" }, class: "w-1/2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+            </div>
+          </div>
+        </div>
+        
+        <%= f.submit "Search", class: "mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <!-- Filters Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">Filters</h2>
+          
+          <%= form_with url: hotels_path, method: :get, class: "space-y-4" do |f| %>
+            <div>
+              <%= f.label :search, class: "block text-sm font-medium text-gray-700" %>
+              <%= f.text_field :search, value: params[:search], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "Search hotels..." %>
+            </div>
+
+            <div>
+              <%= f.label :star_rating, "Star Rating", class: "block text-sm font-medium text-gray-700" %>
+              <div class="mt-2 space-y-2">
+                <% (1..5).each do |rating| %>
+                  <div class="flex items-center">
+                    <%= f.check_box :star_rating, { multiple: true, checked: params[:star_rating]&.include?(rating.to_s) }, rating, nil %>
+                    <%= f.label "star_rating_#{rating}", class: "ml-2 block text-sm text-gray-900" do %>
+                      <% rating.times do %>
+                        <span class="text-yellow-400">★</span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <div>
+              <%= f.label :price_range, "Price Range", class: "block text-sm font-medium text-gray-700" %>
+              <div class="mt-2 grid grid-cols-2 gap-4">
+                <div>
+                  <%= f.label :min_price, "Min", class: "block text-xs text-gray-500" %>
+                  <%= f.number_field :min_price, value: params[:min_price], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+                </div>
+                <div>
+                  <%= f.label :max_price, "Max", class: "block text-xs text-gray-500" %>
+                  <%= f.number_field :max_price, value: params[:max_price], class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <%= f.label :amenities, class: "block text-sm font-medium text-gray-700" %>
+              <div class="mt-2 space-y-2">
+                <%= f.collection_check_boxes :amenity_ids, Amenity.all, :id, :name do |b| %>
+                  <div class="flex items-center">
+                    <%= b.check_box class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
+                    <%= b.label class: "ml-2 block text-sm text-gray-900" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <%= f.submit "Apply Filters", class: "w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Hotel Listings -->
+      <div class="lg:col-span-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <% @hotels.each do |hotel| %>
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+              <div class="w-full h-48 bg-gray-200">
+                <% if hotel.main_image&.attached? %>
+                  <%= image_tag rails_blob_path(hotel.main_image), class: "w-full h-full object-cover" %>
+                <% else %>
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-gray-400 text-lg">No image available</span>
+                  </div>
+                <% end %>
+              </div>
+
+              <div class="p-6">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h3 class="text-lg font-medium text-gray-900">
+                      <%= link_to hotel.name, hotel_path(hotel), class: "hover:text-indigo-600" %>
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500"><%= hotel.address %></p>
+                  </div>
+                  <div class="flex items-center">
+                    <% hotel.star_rating.times do %>
+                      <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                    <% end %>
+                  </div>
+                </div>
+
+                <p class="mt-2 text-sm text-gray-600 line-clamp-2"><%= hotel.description %></p>
+
+                <div class="mt-4">
+                  <h4 class="text-sm font-medium text-gray-900">Amenities</h4>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <% hotel.amenities.limit(3).each do |amenity| %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                        <%= amenity.name %>
+                      </span>
+                    <% end %>
+                    <% if hotel.amenities.count > 3 %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        +<%= hotel.amenities.count - 3 %> more
+                      </span>
+                    <% end %>
+                  </div>
+                </div>
+
+                <div class="mt-6">
+                  <%= link_to "View Details", hotel_path(hotel), class: "w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-8">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
