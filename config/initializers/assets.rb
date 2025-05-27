@@ -7,6 +7,5 @@ Rails.application.config.assets.version = "1.0"
 # Rails.application.config.assets.paths << Emoji.images_path
 
 
-config.assets.enabled = true
-config.assets.paths << Rails.root.join("vendor", "assets", "fonts")
-config.assets.precompile += %w( admin.js admin.css application.css application.js )
+
+Rails.application.config.assets.precompile += %w( admin.js admin.css application.css application.js )

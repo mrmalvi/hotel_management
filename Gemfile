@@ -10,7 +10,7 @@ gem "bootsnap", require: false
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bcrypt", "~> 3.1.7"
-# gem "sprockets-rails"
+gem "sprockets-rails"
 
 # Authentication & Authorization
 gem "devise"
@@ -21,8 +21,8 @@ gem "tailwindcss-rails"
 gem "kaminari"
 gem "font-awesome-rails"
 
-gem "jsbundling-rails", "~> 0.1.0"
-gem "sprockets-rails", ">= 3.4.1"
+gem "jsbundling-rails"
+gem "sprockets-rails"
 
 # File Upload & Storage
 gem "aws-sdk-s3", require: false
