@@ -40,9 +40,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Filters Sidebar -->
       <div class="lg:col-span-1">
-        <div class="bg-white shadow rounded-lg p-6">
+        <div class="bg-white shadow rounded-lg p-6 sticky top-20">
           <h2 class="text-lg font-medium text-gray-900 mb-4">Filters</h2>
-          
+
           <%= form_with url: hotels_path, method: :get, class: "space-y-4" do |f| %>
             <div>
               <%= f.label :search, class: "block text-sm font-medium text-gray-700" %>
@@ -54,7 +54,7 @@
               <div class="mt-2 space-y-2">
                 <% (1..5).each do |rating| %>
                   <div class="flex items-center">
-                    <%= f.check_box :star_rating, { multiple: true, checked: params[:star_rating]&.include?(rating.to_s) }, rating, nil %>
+                    <%#= f.check_box :star_rating, { multiple: true, checked: params[:star_rating]&.include?(rating.to_s) }, rating, nil, id: "star_rating_#{rating}" %>
                     <%= f.label "star_rating_#{rating}", class: "ml-2 block text-sm text-gray-900" do %>
                       <% rating.times do %>
                         <span class="text-yellow-400">★</span>
@@ -81,7 +81,7 @@
 
             <div>
               <%= f.label :amenities, class: "block text-sm font-medium text-gray-700" %>
-              <div class="mt-2 space-y-2">
+              <div class="mt-2 space-y-2 max-h-48 overflow-auto">
                 <%= f.collection_check_boxes :amenity_ids, Amenity.all, :id, :name do |b| %>
                   <div class="flex items-center">
                     <%= b.check_box class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
@@ -100,7 +100,7 @@
       <div class="lg:col-span-3">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <% @hotels.each do |hotel| %>
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="bg-white shadow rounded-lg overflow-hidden flex flex-col">
               <div class="w-full h-48 bg-gray-200">
                 <% if hotel.main_image&.attached? %>
                   <%= image_tag rails_blob_path(hotel.main_image), class: "w-full h-full object-cover" %>
@@ -111,7 +111,7 @@
                 <% end %>
               </div>
 
-              <div class="p-6">
+              <div class="p-6 flex flex-col flex-grow">
                 <div class="flex justify-between items-start">
                   <div>
                     <h3 class="text-lg font-medium text-gray-900">
@@ -128,7 +128,7 @@
                   </div>
                 </div>
 
-                <p class="mt-2 text-sm text-gray-600 line-clamp-2"><%= hotel.description %></p>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-2 flex-grow"><%= hotel.description %></p>
 
                 <div class="mt-4">
                   <h4 class="text-sm font-medium text-gray-900">Amenities</h4>
@@ -160,4 +160,4 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
