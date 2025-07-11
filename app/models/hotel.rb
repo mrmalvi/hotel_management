@@ -10,12 +10,12 @@ class Hotel < ApplicationRecord
   validates :address, presence: true
   validates :description, presence: true
   validates :star_rating, numericality: { in: 1..5 }
-  
+
   scope :by_location, ->(location) { where("address ILIKE ?", "%#{location}%") }
   scope :by_amenities, ->(amenity_ids) { joins(:amenities).where(amenities: { id: amenity_ids }).distinct }
   scope :by_rating, ->(rating) { where(star_rating: rating) }
-  
+
   def main_image
     assets.order(position: :asc).first&.image
   end
-end 
+end

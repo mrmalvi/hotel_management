@@ -1,7 +1,7 @@
-require 'pagy/extras/bootstrap'
-require 'pagy/extras/array'
-require 'pagy/extras/i18n'
-require 'pagy/extras/overflow'
+require "pagy/extras/bootstrap"
+require "pagy/extras/array"
+require "pagy/extras/i18n"
+require "pagy/extras/overflow"
 
 # Pagy initializer file (6.0.4)
 # Customize as you see fit.

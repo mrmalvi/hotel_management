@@ -41,6 +41,8 @@ group :development, :test do
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "faker"
+  gem "brakeman"
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
@@ -57,7 +59,7 @@ group :test do
 end
 
 # Pagination
-gem 'pagy'
+gem "pagy"
 
 # Modern Rails features
 gem "importmap-rails"

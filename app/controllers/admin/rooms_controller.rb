@@ -2,7 +2,7 @@ module Admin
   class RoomsController < Admin::BaseController
     before_action :set_platform
     before_action :set_hotel
-    before_action :set_room, only: [:show, :edit, :update, :destroy]
+    before_action :set_room, only: [ :show, :edit, :update, :destroy ]
 
     def index
       @rooms = @hotel.rooms.includes(:amenities).page(params[:page]).per(10)
@@ -19,7 +19,7 @@ module Admin
       @room = @hotel.rooms.build(room_params)
 
       if @room.save
-        redirect_to admin_hotel_room_path(@hotel, @room), notice: 'Room was successfully created.'
+        redirect_to admin_hotel_room_path(@hotel, @room), notice: "Room was successfully created."
       else
         render :new
       end
@@ -30,7 +30,7 @@ module Admin
 
     def update
       if @room.update(room_params)
-        redirect_to admin_hotel_room_path(@hotel, @room), notice: 'Room was successfully updated.'
+        redirect_to admin_hotel_room_path(@hotel, @room), notice: "Room was successfully updated."
       else
         render :edit
       end
@@ -38,7 +38,7 @@ module Admin
 
     def destroy
       @room.destroy
-      redirect_to admin_hotel_rooms_path(@hotel), notice: 'Room was successfully deleted.'
+      redirect_to admin_hotel_rooms_path(@hotel), notice: "Room was successfully deleted."
     end
 
     private
@@ -63,4 +63,4 @@ module Admin
       )
     end
   end
-end 
+end
