@@ -10,13 +10,13 @@ class EmiSchedule < ApplicationRecord
   validates :remaining_principal, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   enum status: {
-    pending: 'pending',
-    paid: 'paid',
-    overdue: 'overdue'
+    pending: "pending",
+    paid: "paid",
+    overdue: "overdue"
   }
 
-  scope :overdue, -> { where('due_date < ? AND status = ?', Date.today, 'pending') }
-  scope :upcoming, -> { where('due_date >= ? AND status = ?', Date.today, 'pending') }
+  scope :overdue, -> { where("due_date < ? AND status = ?", Date.today, "pending") }
+  scope :upcoming, -> { where("due_date >= ? AND status = ?", Date.today, "pending") }
 
   def destroy_future_vouchers
     future_vouchers.destroy_all
@@ -52,4 +52,4 @@ class EmiSchedule < ApplicationRecord
     update!(status: :overdue)
     vehicle.check_payment_status
   end
-end 
+end

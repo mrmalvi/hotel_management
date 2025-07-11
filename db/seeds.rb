@@ -112,7 +112,7 @@ hotels.each do |hotel_data|
   assets.each do |asset_data|
     image_url = asset_data.delete(:image_url)
     asset = hotel.assets.create!(asset_data)
-    
+
     # Download and attach the image
     begin
       image = URI.open(image_url)

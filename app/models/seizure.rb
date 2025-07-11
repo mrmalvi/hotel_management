@@ -8,9 +8,9 @@ class Seizure < ApplicationRecord
   validates :release_deadline, presence: true
 
   enum status: {
-    active: 'active',
-    released: 'released',
-    permanent: 'permanent'
+    active: "active",
+    released: "released",
+    permanent: "permanent"
   }
 
   before_validation :set_release_deadline, on: :create
@@ -19,14 +19,14 @@ class Seizure < ApplicationRecord
 
   def handle_future_vouchers
     # Destroy future vouchers after seizure date
-    vehicle.emi_schedules.where('due_date > ?', seized_at).each do |emi|
+    vehicle.emi_schedules.where("due_date > ?", seized_at).each do |emi|
       emi.destroy_future_vouchers
     end
 
     # Create cash flow entry for seizure
     create_cash_flow(
       amount: total_overdue_amount,
-      flow_type: 'seizure',
+      flow_type: "seizure",
       flow_date: seized_at,
       description: "Vehicle seizure due to overdue EMIs"
     )
@@ -36,14 +36,14 @@ class Seizure < ApplicationRecord
     return unless released?
 
     # Recreate future vouchers after release
-    vehicle.emi_schedules.where('due_date > ?', released_at).each do |emi|
+    vehicle.emi_schedules.where("due_date > ?", released_at).each do |emi|
       emi.recreate_future_vouchers
     end
 
     # Create cash flow entry for release
     create_cash_flow(
       amount: -total_overdue_amount,
-      flow_type: 'release',
+      flow_type: "release",
       flow_date: released_at,
       description: "Vehicle release after payment"
     )
@@ -54,4 +54,4 @@ class Seizure < ApplicationRecord
   def set_release_deadline
     self.release_deadline = seized_at + 30.days if seized_at.present?
   end
-end 
+end

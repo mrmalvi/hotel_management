@@ -27,4 +27,4 @@ class ReleaseVehicleSeizureWorker
     Rails.logger.error("Error releasing vehicle #{vehicle_id}: #{e.message}")
     raise e
   end
-end 
+end

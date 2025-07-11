@@ -10,20 +10,20 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Mount Active Storage routes
-  mount ActiveStorage::Engine => '/rails/active_storage'
+  mount ActiveStorage::Engine => "/rails/active_storage"
 
   # Root path
-  root 'hotels#index'
+  root "hotels#index"
 
   # Public routes
-  resources :hotels, only: [:index, :show] do
-    resources :rooms, only: [:index, :show]
+  resources :hotels, only: [ :index, :show ] do
+    resources :rooms, only: [ :index, :show ]
   end
-  resources :bookings, only: [:new, :create, :show]
+  resources :bookings, only: [ :new, :create, :show ]
 
   # Admin routes
   namespace :admin do
-    root to: 'dashboard#index'
+    root to: "dashboard#index"
     resources :hotels do
       resources :rooms
     end

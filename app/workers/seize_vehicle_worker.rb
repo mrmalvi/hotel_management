@@ -32,4 +32,4 @@ class SeizeVehicleWorker
     Rails.logger.error("Error seizing vehicle #{vehicle_id}: #{e.message}")
     raise e
   end
-end 
+end

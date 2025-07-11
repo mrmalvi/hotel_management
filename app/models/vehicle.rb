@@ -12,15 +12,15 @@ class Vehicle < ApplicationRecord
   validates :interest_rate, presence: true, numericality: { greater_than: 0 }
 
   enum status: {
-    active: 'active',
-    seized: 'seized',
-    released: 'released'
+    active: "active",
+    seized: "seized",
+    released: "released"
   }
 
   def calculate_emi
     principal = purchase_price - down_payment
     monthly_interest_rate = interest_rate / 12 / 100
-    emi = principal * (monthly_interest_rate * (1 + monthly_interest_rate)**loan_term_months) / 
+    emi = principal * (monthly_interest_rate * (1 + monthly_interest_rate)**loan_term_months) /
           ((1 + monthly_interest_rate)**loan_term_months - 1)
     emi.round(2)
   end
@@ -41,13 +41,13 @@ class Vehicle < ApplicationRecord
         principal_component: principal_component,
         interest_component: interest_component,
         remaining_principal: remaining_principal,
-        status: 'pending'
+        status: "pending"
       )
     end
   end
 
   def check_payment_status
-    overdue_emis = emi_schedules.where('due_date < ? AND status = ?', Date.today, 'pending')
+    overdue_emis = emi_schedules.where("due_date < ? AND status = ?", Date.today, "pending")
     if overdue_emis.count >= 3
       SeizeVehicleWorker.perform_async(id)
     end
@@ -55,7 +55,7 @@ class Vehicle < ApplicationRecord
 
   def seize!
     return if seized?
-    
+
     transaction do
       update!(status: :seized)
       create_seizure!(
@@ -68,7 +68,7 @@ class Vehicle < ApplicationRecord
 
   def release!
     return unless seized?
-    
+
     transaction do
       update!(status: :released)
       seizure.update!(status: :released, released_at: Time.current)
@@ -77,10 +77,10 @@ class Vehicle < ApplicationRecord
 
   def permanent_seizure!
     return unless seized?
-    
+
     transaction do
       update!(status: :seized)
       seizure.update!(status: :permanent)
     end
   end
-end 
+end

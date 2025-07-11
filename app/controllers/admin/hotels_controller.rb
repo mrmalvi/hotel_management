@@ -1,7 +1,7 @@
 module Admin
   class HotelsController < Admin::BaseController
     before_action :set_platform
-    before_action :set_hotel, only: [:show, :edit, :update, :destroy]
+    before_action :set_hotel, only: [ :show, :edit, :update, :destroy ]
 
     def index
       @hotels = @platform.hotels.includes(:rooms).page(params[:page]).per(10)
@@ -19,7 +19,7 @@ module Admin
       @hotel = @platform.hotels.build(hotel_params)
 
       if @hotel.save
-        redirect_to admin_hotel_path(@hotel), notice: 'Hotel was successfully created.'
+        redirect_to admin_hotel_path(@hotel), notice: "Hotel was successfully created."
       else
         render :new
       end
@@ -30,7 +30,7 @@ module Admin
 
     def update
       if @hotel.update(hotel_params)
-        redirect_to admin_hotel_path(@hotel), notice: 'Hotel was successfully updated.'
+        redirect_to admin_hotel_path(@hotel), notice: "Hotel was successfully updated."
       else
         render :edit
       end
@@ -38,7 +38,7 @@ module Admin
 
     def destroy
       @hotel.destroy
-      redirect_to admin_hotels_path, notice: 'Hotel was successfully deleted.'
+      redirect_to admin_hotels_path, notice: "Hotel was successfully deleted."
     end
 
     private
@@ -58,4 +58,4 @@ module Admin
       )
     end
   end
-end 
+end
